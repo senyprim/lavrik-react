@@ -6,19 +6,43 @@ export default class extends React.Component {
         super(props);
         const {min,max,value,onChange}=props;
         this.onChange=onChange??function(){};
+        this.min=min??Number.MIN_SAFE_INTEGER;
+        this.max=max??Number.MAX_SAFE_INTEGER;
+        if (this.min>this.max) {
+            (this.min,this.max)=(this.max,this.min);
+        }
+
+
         
 
         this.state = {
             value: value??min??0
         };
     }
-    setValue=(value)=>{
-        value=value<this.min??Number.MIN_SAFE_INTEGER?this.min:value;
-        value=value>this.max??Number.MAX_SAFE_INTEGER?this.max:value;
-        this.setState(value);
+    //Проверяем новое значение 
+    isValidValue=(value)=>{
+        if (value>max || value<min){
+            return false;
+        }
+        return true;
     }
-    increase =()=>this.setValue({value:this.state.value+1});
-    decrease =()=>this.setValue({value:this.state.value - 1});
+    validateValue=(value)=>{
+        value=value<this.min?this.min:value;
+        value=value>this.max?this.max:value;
+        return value;
+    }
+    //Вмещаем в диапазон
+    
+    setValue=(value)=>{
+        value = typeof value == "string" ? parseInt(value) :value;
+        if (this.isValidValue(value)){
+            this.setState({value:value});
+            this.onChange(value);
+        }
+    }
+
+    increase =()=>this.setValue(this.state.value+1);
+    decrease =()=>this.setValue(this.state.value-1);
 
     render() {
         return (
@@ -27,7 +51,7 @@ export default class extends React.Component {
                 <input
                     type="text"
                     value={this.state.value}
-                    onChange={(value)=>onChange(value)}
+                    onChange={(evt)=>this.setValue(evt.target.value)}
                 />
                 <button className="increase" onClick={this.increase}>+</button>
             </div>
