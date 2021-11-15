@@ -26,7 +26,6 @@ export default class extends React.Component {
   };
 
   acceptNewValue=()=>{
-    console.log(`acceptNewValue: state.value=${this.state.value}  state.newValue=${this.state.newValue}`);
     const value = parseInt(this.state.newValue,10);
     this.set(isNaN(value)?this.props.min:value);
   }
