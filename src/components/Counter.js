@@ -7,8 +7,10 @@ export default class extends React.Component {
     max: PropTypes.number.isRequired,
     value: PropTypes.number,
   };
+
   state = {
     value: this.props.min,
+    newValue:this.props.min
   };
 
   trunkValue = (value) => {
@@ -17,10 +19,21 @@ export default class extends React.Component {
 
   increase = () => this.set(this.state.value + 1);
   decrease = () => this.set(this.state.value - 1);
+
   set = (value) => {
     value = this.trunkValue(value);
-    this.setState({ value });
+    this.setState({ value,newValue:value });
   };
+
+  acceptNewValue=()=>{
+    console.log(`acceptNewValue: state.value=${this.state.value}  state.newValue=${this.state.newValue}`);
+    const value = parseInt(this.state.newValue,10);
+    this.set(isNaN(value)?this.props.min:value);
+  }
+
+  setNewValue(newValue){
+    this.setState({newValue:newValue});
+  }
 
   render() {
     return (
@@ -28,7 +41,11 @@ export default class extends React.Component {
         <button className="decrease" onClick={this.decrease}>
           -
         </button>
-        <span>{this.state.value}</span>
+        <input
+          value={this.state.newValue}
+          onChange={(evt) => this.setNewValue(evt.target.value)}
+          onBlur={this.acceptNewValue}
+        />
         <button className="increase" onClick={this.increase}>
           +
         </button>
