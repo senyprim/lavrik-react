@@ -1,15 +1,20 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 export default class extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      value: props.value,
-    };
-  }
+  static propTypes = {
+    min: PropTypes.number.isRequired,
+    max: PropTypes.number.isRequired,
+    value: PropTypes.number,
+  };
+  state = {
+    value: this.props.min,
+  };
 
-  trunkValue = (value) => {return Math.max(this.props.min, Math.min(value, this.props.max));};
-  
+  trunkValue = (value) => {
+    return Math.max(this.props.min, Math.min(value, this.props.max));
+  };
+
   increase = () => this.set(this.state.value + 1);
   decrease = () => this.set(this.state.value - 1);
   set = (value) => {

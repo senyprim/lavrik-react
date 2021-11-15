@@ -7,7 +7,6 @@ export default function () {
             <Counter
             min={min}
             max={max}
-            value={value}
             />
         </div>
     )
