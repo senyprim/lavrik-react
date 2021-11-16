@@ -1,8 +1,10 @@
 import React from "react";
-import Counter from "./Counter";
+import Cart from "./Cart";
+import Order from "./Order";
 
 export default class extends React.Component {
   state = {
+    isOrder: false,
     products: [
       {
         id: 100,
@@ -47,57 +49,37 @@ export default class extends React.Component {
 
   change = (newCount, id) => {
     console.log(`change:${newCount} id:${id} count:${newCount}`);
-    this.setState({products:this._getUpdateProducts(id, { count: newCount })},()=>console.log(this.state));
+    this.setState(
+      { products: this._getUpdateProducts(id, { count: newCount }) },
+      () => console.log(this.state)
+    );
   };
 
   remove = (id) => {
     console.log(`remove: id:${id}`);
-    this.setState({products:this._getUpdateProducts(id)});
+    this.setState({ products: this._getUpdateProducts(id) });
   };
 
-  render() {
-    const productsRows = this.state.products.map((item, index) => {
-      const { id, title, price, rest, count } = item;
-      const total = price * count;
-      return (
-        <tr key={`${id}:${0}:${rest}:${count}`}>
-          <td>{title}</td>
-          <td>{price}</td>
-          <td>
-            <Counter
-              min={0}
-              max={rest}
-              onChange={(newCount) => this.change(newCount, id)}
-              count={count}
-            />
-          </td>
-          <td>{total}</td>
-          <td>
-            <button onClick={() => this.remove(id)}>Удалить из корзины</button>
-          </td>
-        </tr>
-      );
-    });
-    const itog=this.state.products.reduce((ac,i)=>ac+i.count*i.price,0)
-    return (
-      <div>
-        <h2>Cart</h2>
-        <table>
-          <tbody>
-            <tr>
-              <td>Title</td>
-              <td>Price</td>
-              <td>Count</td>
-              <td>Total</td>
-            </tr>
-            {productsRows}
-            <tr>
-                <td>Итого:</td>
-                <td>{itog}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+  setOrder = () => {
+    this.setState({ isOrder: true });
+  };
+
+  getContent = () => {
+    return this.state.isOrder ? (
+      <Order products={this.state.products} />
+    ) : (
+      <>
+        <Cart
+          products={this.state.products}
+          onChange={this.change}
+          onRemove={this.remove}
+        />
+        <button onClick={this.setOrder}>Заказать</button>
+      </>
     );
-  }
+  };
+
+  render = () => {
+    return <div>{this.getContent()}</div>;
+  };
 }
