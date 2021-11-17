@@ -31,13 +31,13 @@ function Cart(props) {
           <Counter
             min={0}
             max={rest}
-            onChange={(count)=>onChange(count,id)}
+            onChange={(count)=>onChange(count,index)}
             count={count}
           />
         </td>
         <td>{total}</td>
         <td>
-          <button onClick={() => onRemove(id)}>Удалить из корзины</button>
+          <button onClick={() => onRemove(index)}>Удалить из корзины</button>
         </td>
       </tr>
     );
