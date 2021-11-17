@@ -15,7 +15,9 @@ export default class extends React.Component {
   };
 
   remove = (i) => {
-    this.setState({ products: this.state.products.filter((item,index)=>index!=i)});
+    let products = [...this.state.products];
+    products.splice(i,1);
+    this.setState({products});
   };
 
   setOrder = () => {
@@ -32,6 +34,7 @@ export default class extends React.Component {
           onRemove={this.remove}
         />
         <button onClick={this.setOrder}>Заказать</button>
+        <button onClick={()=>this.change(3,0)}>Изменить count</button>
       </div>
       )
     }
