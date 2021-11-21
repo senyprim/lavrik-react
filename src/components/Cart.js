@@ -1,6 +1,6 @@
 import React from "react";
-import Counter from "./Counter";
 import PropTypes from "prop-types";
+import CounterSimple from "./CounterSimple";
 
 Cart.propTypes = {
   onChange: PropTypes.func.isRequired,
@@ -24,14 +24,14 @@ function Cart(props) {
     const { id, title, price, rest=0, count=0 } = item;
     const total = price * count;
     return (
-      <tr key={`${id}:${0}:${rest}:${count}`}>
+      <tr key={id}>
         <td>{title}</td>
         <td>{price}</td>
         <td>
-          <Counter
+          <CounterSimple
             min={0}
             max={rest}
-            onChange={(count)=>onChange(count,index)}
+            onChange={(newCount)=>onChange(newCount,index)}
             count={count}
           />
         </td>
