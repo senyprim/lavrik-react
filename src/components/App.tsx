@@ -1,6 +1,6 @@
 import React from "react";
 import Cart from "./Cart";
-import Order from "./Order";
+import ResultScreen from "./ResultScreen";
 import {Product} from "../types";
 
 
@@ -31,23 +31,26 @@ export default class extends React.Component<null,IState> {
   orderComplete = () => {
     this.setState({ isOrderComplete: true });
   };
+  get total(){
+    return this.state.products.reduce((ac, i) => ac + i.count * (i.price??0), 0);
+  }
   
   render = () => {
     if (!this.state.isOrderComplete){
       return(
-        <div>
+        <div className="app__cart">
         <Cart
           products={this.state.products}
           onChange={this.changeProductCount}
           onRemove={this.removeProduct}
         />
-        <button onClick={this.orderComplete}>Заказать</button>
+        <button className="app__button app__button--to-order" onClick={this.orderComplete}>Заказать</button>
       </div>
       )
     }
     else{
       return(
-        <Order products={this.state.products} />
+        <ResultScreen products={this.state.products} />
       )
     }
   };

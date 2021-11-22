@@ -1,28 +1,16 @@
 import React from "react";
-import PropTypes from "prop-types";
-import { Product } from "../types";
+import { Product, getTotalCostProducts } from "../types";
 
-Order.propTypes = {
-  products: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      title: PropTypes.string.isRequired,
-      price: PropTypes.number.isRequired,
-      rest: PropTypes.number,
-      count: PropTypes.number,
-    })
-  ),
-};
+
 interface IProps{
   products:Product[]
 }
 
-function Order(props:IProps) {
+function ResultScreen(props:IProps) {
   const {products} = props;
-  const itog = products.reduce((ac, i) => ac + i.count * i.price, 0);
   const productsRows = products.map((item, index) => {
     const { id, title, price, rest = 0, count = 0 } = item;
-    const total = price * count;
+    const total = (price??0) * count;
     return (
       <tr key={`${id}:${0}:${rest}:${count}`}>
         <td>{title}</td>
@@ -35,7 +23,7 @@ function Order(props:IProps) {
 
   return (
     <div>
-      <h2>Order:</h2>
+      <h2>ResultScreen:</h2>
       <table>
         <tbody>
           <tr>
@@ -47,7 +35,7 @@ function Order(props:IProps) {
           {productsRows}
           <tr>
             <td>Итого:</td>
-            <td>{itog}</td>
+            <td>{getTotalCostProducts(products)}</td>
           </tr>
         </tbody>
       </table>
@@ -55,4 +43,4 @@ function Order(props:IProps) {
   );
 }
 
-export default Order;
+export default ResultScreen;

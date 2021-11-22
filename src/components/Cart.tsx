@@ -1,6 +1,5 @@
 import React from "react";
-import PropTypes from "prop-types";
-import CounterSimple from "./CounterSimple";
+import MinMax from "./MinMax";
 import { Product } from "../types";
 
 interface IProps{
@@ -17,40 +16,39 @@ function Cart(props:IProps) {
     const { id, title, price, rest=0, count=0 } = item;
     const total = (price ??0)* count;
     return (
-      <tr key={id}>
-        <td>{title}</td>
-        <td>{price}</td>
-        <td>
-          <CounterSimple
+      <tr key={id} className="cart__product-row">
+        <td className="cart__product-name">{title}</td>
+        <td className="cart__product-price">{price}</td>
+        <td className="cart__product-count">
+          <MinMax 
             min={0}
             max={rest}
-            onChange={(newCount)=>onChange(newCount,index)}
+            onChange={(newCount:number)=>onChange(newCount,index)}
             count={count}
           />
         </td>
-        <td>{total}</td>
-        <td>
-          <button onClick={() => onRemove(index)}>Удалить из корзины</button>
+        <td className="cart__product-total">{total}</td>
+        <td className="cart__action-row ">
+          <button className="cart__action-button cart__action-button--remove" onClick={() => onRemove(index)}>Удалить из корзины</button>
         </td>
       </tr>
     );
   });
 
   return (
-    <div>
-      <h2>Cart:</h2>
-      <table>
+    <div className="cart">
+      <h2 className="cart__header">Cart:</h2>
+      <table className="cart__table">
         <tbody>
-          <tr>
+          <tr className="cart__header-row">
             <td>Title</td>
             <td>Price</td>
             <td>Count</td>
             <td>Total</td>
           </tr>
           {productsRows}
-          <tr>
-              <td>Итого:</td>
-              <td>{itog}</td>
+          <tr className="cart__total-row">
+              <td >Итого:${itog}</td>
           </tr>
         </tbody>
       </table>
