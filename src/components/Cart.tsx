@@ -3,19 +3,6 @@ import PropTypes from "prop-types";
 import CounterSimple from "./CounterSimple";
 import { Product } from "../types";
 
-Cart.propTypes = {
-  onChange: PropTypes.func.isRequired,
-  onRemove: PropTypes.func.isRequired,
-  products: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      title: PropTypes.string.isRequired,
-      price: PropTypes.number.isRequired,
-      rest: PropTypes.number,
-      count: PropTypes.number,
-    })
-  ),
-};
 interface IProps{
   products:Product[],
   onRemove:(index:number)=>void,
@@ -25,10 +12,10 @@ interface IProps{
 function Cart(props:IProps) {
   const { products, onChange,onRemove } = props;
 
-  const itog= products.reduce((ac,i)=>ac+i.count*i.price,0)
+  const itog= products.reduce((ac,i)=>ac+i.count*(i.price??0),0)
   const productsRows = products.map((item, index) => {
     const { id, title, price, rest=0, count=0 } = item;
-    const total = price * count;
+    const total = (price ??0)* count;
     return (
       <tr key={id}>
         <td>{title}</td>

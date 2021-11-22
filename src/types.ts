@@ -3,5 +3,5 @@ export type Product = {
     title: string,
     price?: number,
     rest?: number,
-    count?: number
+    count: number
 }
