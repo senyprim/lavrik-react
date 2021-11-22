@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import VanilInput from "./LazyInput";
 import  styles from "./minmax.module.scss";
+
 interface IProps{
   min:number,
   max:number,

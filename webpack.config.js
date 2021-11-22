@@ -42,12 +42,10 @@ module.exports = {
       },
       {
         test: /\.module\.(css|scss)$/,
+        exclude: /node_modules/,
         use: [
           {
             loader:  MiniCssExtractPlugin.loader,
-            options:{
-
-            }
           },
           {
             loader:"css-loader",
@@ -63,28 +61,16 @@ module.exports = {
         ],
       },
       {
-        test: /(?<!\.module)\.(css)$/,
-        exclude: /node_modules/,
+        test: /^.*(?<!\.module)\.css$/,
         use: [
           {
             loader:  MiniCssExtractPlugin.loader,
-            options:{
-
-            }
           },
           {
             loader:"css-loader",
-            options:{
-              modules:{
-                localIdentName: "[local]_[hash:base64:5]"
-              },
-              sourceMap:true
-            },
           },
-          
         ],
       },
-
       {
         test: /\.(jpg|jpeg|png|gif|mp3|svg)$/,
         use: ["file-loader"],

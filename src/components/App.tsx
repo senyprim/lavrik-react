@@ -1,55 +1,61 @@
 import React from "react";
 import Cart from "./Cart";
 import ResultScreen from "./ResultScreen";
-import {Product} from "../types";
+import { Product } from "../types";
+
+import {Button} from  "react-bootstrap";
+import "./../../node_modules/bootstrap/dist/css/bootstrap.min.css";
 
 
-
-interface IState{
-  isOrderComplete:boolean,
-  products:Product[]
+interface IState {
+  isOrderComplete: boolean,
+  products: Product[]
 }
 
-export default class extends React.Component<null,IState> {
+export default class extends React.Component<null, IState> {
   state = {
     isOrderComplete: false,
     products: getProducts()
   };
 
-  changeProductCount = (newCount:number, index:number):void => {
+  changeProductCount = (newCount: number, index: number): void => {
     let products = [...this.state.products];
-    products[index]={...products[index],count:newCount};
-    this.setState({products})
+    products[index] = { ...products[index], count: newCount };
+    this.setState({ products })
   };
 
-  removeProduct = (i:number):void => {
+  removeProduct = (i: number): void => {
     let products = [...this.state.products];
-    products.splice(i,1);
-    this.setState({products});
+    products.splice(i, 1);
+    this.setState({ products });
   };
 
   orderComplete = () => {
     this.setState({ isOrderComplete: true });
   };
-  get total(){
-    return this.state.products.reduce((ac, i) => ac + i.count * (i.price??0), 0);
+  get total() {
+    return this.state.products.reduce((ac, i) => ac + i.count * (i.price ?? 0), 0);
   }
-  
+
   render = () => {
-    if (!this.state.isOrderComplete){
-      return(
+    if (!this.state.isOrderComplete) {
+      return (
         <div className="app__cart">
-        <Cart
-          products={this.state.products}
-          onChange={this.changeProductCount}
-          onRemove={this.removeProduct}
-        />
-        <button className="app__button app__button--to-order" onClick={this.orderComplete}>Заказать</button>
-      </div>
+          <Cart
+            products={this.state.products}
+            onChange={this.changeProductCount}
+            onRemove={this.removeProduct}
+          />
+          <button className="app__button app__button--to-order" onClick={this.orderComplete}>Заказать</button>
+          <Button variant="primary">
+            Unreal change cnt
+          </Button>
+
+        </div>
       )
     }
-    else{
-      return(
+    else {
+      return (
         <ResultScreen products={this.state.products} />
       )
     }
@@ -57,7 +63,7 @@ export default class extends React.Component<null,IState> {
 }
 
 
-const getProducts=()=>{
+const getProducts = () => {
   return [
     {
       id: 100,
