@@ -27,25 +27,23 @@ function MinMax(props:IProps) {
   }
 
   return (
-    <div className="counter">
+    <div className={styles.counter}>
       <button
         className={styles.button}
         onClick={decrease}
         disabled={props.count === props.min}
       >
-        -
       </button>
       <VanilInput
-        other={{className:"counter__input"}}
+        other={{className:styles.input}}
         value={props.count.toString()}
         onChange={(evt)=>acceptInputValue(evt.target.value)}
       />
       <button
-        className="counter__button--increase button"
+        className={`${styles.button} ${styles.buttonPlus}`}
         onClick={increase}
         disabled={props.count === props.max}
       >
-        +
       </button>
     </div>
   );
