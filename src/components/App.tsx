@@ -40,19 +40,9 @@ export default class extends React.Component<null, IState> {
     });
   };
   //Обработчик смены currentPage на следующую
-  nextPage = () => {
-    this.setState((state) => {
-      const countPages = Object.keys(Pages).length / 2;
-      const newPage =
-        state.currentPage < 0 || state.currentPage > countPages - 1
-          ? 0
-          : state.currentPage + 1;
-      return { currentPage: newPage };
-    });
+  gotoPage = (page: Pages) => {
+    this.setState({ currentPage: page });
   };
-  gotoPage = (page:Pages) =>{
-    this.setState({currentPage:page})
-  }
   previousPage = () => {
     this.setState((state) => {
       const countPages = Object.keys(Pages).length / 2;
@@ -63,8 +53,8 @@ export default class extends React.Component<null, IState> {
       return { currentPage: newPage };
     });
   };
-  completeOrder= () => {
-    alert('Заказ принят');
+  completeOrder = () => {
+    alert("Заказ принят");
   };
   //Возвращает итог по товарам в корзине
   get total() {
@@ -75,38 +65,44 @@ export default class extends React.Component<null, IState> {
   }
 
   render = () => {
-    const getCartPage=()=>(
+    const _getCartPage = () => (
       <div className="container-fluid">
-      <Cart
-        products={this.state.products}
-        onChange={this.changeProductCount}
-        onRemove={this.removeProduct}
-        nextPage={()=>this.gotoPage(Pages.UserData)}
-      />
-    </div>
-    )
-    const getUserPage=()=>(
-      <OrderForm
-          {...this.state.user}
-          user={this.state.user}
-          onChange={this.changeUserField}
-          nextPage={()=>this.gotoPage(Pages.Finish)}
-          previousPage={()=>this.gotoPage(Pages.Cart)}
+        <Cart
+          products={this.state.products}
+          onChange={this.changeProductCount}
+          onRemove={this.removeProduct}
+          nextPage={() => this.gotoPage(Pages.UserData)}
         />
-    )
-    const getResultPage = ()=>(
-      <ResultScreen
-      products={this.state.products}
-      user={this.state.user}
-      completeOrder={this.completeOrder}
-      previousPage={()=>this.gotoPage(Pages.UserData)}
+      </div>
+    );
+    const _getUserPage = () => (
+      <OrderForm
+        {...this.state.user}
+        user={this.state.user}
+        onChange={this.changeUserField}
+        nextPage={() => this.gotoPage(Pages.Finish)}
+        previousPage={() => this.gotoPage(Pages.Cart)}
       />
-    )
+    );
+    const _getResultPage = () => (
+      <ResultScreen
+        products={this.state.products}
+        user={this.state.user}
+        completeOrder={this.completeOrder}
+        previousPage={() => this.gotoPage(Pages.UserData)}
+      />
+    );
     console.log(`Page=${this.state.currentPage}`);
     switch (this.state.currentPage) {
-      case Pages.Cart: return getCartPage();break;
-      case Pages.UserData: return getUserPage();break;
-      case Pages.Finish: return getResultPage();break;
+      case Pages.Cart:
+        return _getCartPage();
+        break;
+      case Pages.UserData:
+        return _getUserPage();
+        break;
+      case Pages.Finish:
+        return _getResultPage();
+        break;
     }
   };
 }

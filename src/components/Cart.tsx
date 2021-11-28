@@ -1,6 +1,6 @@
 import React from "react";
 import MinMax from "./MinMax";
-import { Product } from "../types";
+import { getTotalCostProducts, Product } from "../types";
 
 interface IProps {
   products: Product[];
@@ -12,7 +12,6 @@ interface IProps {
 function Cart(props: IProps) {
   const {nextPage, products, onChange, onRemove } = props;
 
-  const itog = products.reduce((ac, i) => ac + i.count * (i.price ?? 0), 0);
   const productsRows = products.map((item, index) => {
     const { id, title, price, rest = 0, count = 0 } = item;
     const total = (price ?? 0) * count;
@@ -48,7 +47,7 @@ function Cart(props: IProps) {
     <div className="padding-bottom-3x mb-1">
       <h2 className="cart_title">
         Shopping Cart
-        <small> ({props.products.length} item in your cart) </small>
+        <small> ({products.length} item in your cart) </small>
       </h2>
       <div className="">
         <table className="table table-striped table-bordered border-primary">
@@ -64,7 +63,7 @@ function Cart(props: IProps) {
           <tbody>
             {productsRows}
             <tr className="cart__total-row">
-              <td colSpan={5}>Итого:{itog}</td>
+              <td colSpan={5}>Итого:{getTotalCostProducts(products)}</td>
             </tr>
           </tbody>
         </table>
