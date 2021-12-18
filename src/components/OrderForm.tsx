@@ -1,17 +1,13 @@
 import Button from "@restart/ui/esm/Button";
 import React from "react";
 import { Modal } from "react-bootstrap";
-import { User } from "../types";
 import LazyInput from "./LazyInput";
+import router from '../store/Router';
+import user from '../store/User';
+import { observer } from "mobx-react";
 
-interface IProps {
-  user: User;
-  onChange: (field: keyof User, value: string) => void;
-  nextPage: () => void;
-  previousPage: () => void;
-}
 
-const OrderForm = (props: IProps) => {
+function OrderForm() {
   console.log('OrderForm');
   const [show, setShow] = React.useState(false);
   const closeModal = ()=>{
@@ -20,9 +16,10 @@ const OrderForm = (props: IProps) => {
   }
   const confirm = ()=>{
     closeModal();
-    props.nextPage();
+    user.setConfirm(true);
+    router.nextPage();
   }
-  const { name, email, phone } = props.user;
+  const { name, email, phone } = user;
   return (
     <div>
       <h2>Контактные данные</h2>
@@ -39,7 +36,7 @@ const OrderForm = (props: IProps) => {
                 placeholder: "Имя",
               }}
               value={name}
-              onChange={(evt) => props.onChange("name", evt.target.value)}
+              onChange={(evt) => user.setName(evt.target.value)}
             />
           </div>
         </div>
@@ -55,7 +52,7 @@ const OrderForm = (props: IProps) => {
                 id: "inputEmail",
                 placeholder: "Email",
               }}
-              onChange={(evt) => props.onChange("email", evt.target.value)}
+              onChange={(evt) => user.setEmail(evt.target.value)}
               value={email}
             />
           </div>
@@ -72,24 +69,23 @@ const OrderForm = (props: IProps) => {
                 id: "inputTel",
                 placeholder: "Телефон",
               }}
-              onChange={(evt) => props.onChange("phone", evt.target.value)}
+              onChange={(evt) =>user.setPhone(evt.target.value)}
               value={phone}
             />
           </div>
         </div>
-        <button className="btn btn-danger" onClick={props.previousPage}>
+        <button type="button" className="btn btn-danger" onClick={()=>router.previusPage()}>
           Назад
         </button>
         <button
         className="btn btn-primary"
-        type="button"
-          onClick={()=>setShow(true)}
+        onClick={()=>setShow(true)}
         >
           Далее
         </button>
       </form>
 
-      <Modal show={show} onHide={()=>closeModal()}>
+      <Modal show={show} onHide={closeModal}>
         <Modal.Header closeButton>
           <Modal.Title>Подтвердите контактные данные:</Modal.Title>
         </Modal.Header>
@@ -107,7 +103,7 @@ const OrderForm = (props: IProps) => {
           </ul>
         </Modal.Body>
         <Modal.Footer>
-          <Button  onClick={()=>closeModal()}>
+          <Button  onClick={closeModal}>
             Не верно - Вернуться 
           </Button>
           <Button  onClick={confirm}>
@@ -118,4 +114,4 @@ const OrderForm = (props: IProps) => {
     </div>
   );
 };
-export default OrderForm;
+export default observer(OrderForm);

@@ -1,5 +1,4 @@
 import React, { ChangeEvent, HTMLAttributes } from "react";
-import { isPropertySignature } from "typescript";
 
 interface IProps{
   value?:string,
@@ -17,13 +16,16 @@ export default class extends React.Component<IProps> {
   }
   componentDidUpdate(prevProps:IProps){
     const value = this.inputRef?.current?.value;
-    console.log(`DidUpdate start : prev=${prevProps.value} props:${this.props.value} value:${value}`);
     if (prevProps.value === this.props.value && this.props.value == value) return;
-    console.log(`DidUpdate Update`);
     if (this.inputRef.current){
       this.inputRef.current.value=this.props.value??'';
     }
-
+  }
+  //Меняем value без отсылки родителю
+  setValue=(value:string)=>{
+    if (this.inputRef.current){
+    this.inputRef.current.value=value;
+    }
   }
 
   //меняем value

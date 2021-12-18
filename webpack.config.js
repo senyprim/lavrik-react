@@ -20,6 +20,14 @@ module.exports = {
             loader: "babel-loader",
             options: {
               presets: ["@babel/preset-env", "@babel/preset-react"],
+              plugins: [
+                ["@babel/plugin-proposal-decorators", { legacy: true }],
+                ["@babel/plugin-proposal-class-properties", { loose: false }],
+                // In contrast to MobX 4/5, "loose" must be false!    ^
+              ],
+              "assumptions": {
+                "setPublicClassFields": false
+            }
             },
           },
         ],
@@ -36,6 +44,15 @@ module.exports = {
                 "@babel/preset-react",
                 "@babel/preset-typescript",
               ],
+              plugins: [
+                "@babel/plugin-transform-react-jsx",
+                ["@babel/plugin-proposal-decorators", { legacy: true }],
+                ["@babel/plugin-proposal-class-properties", { loose: false }],
+                // In contrast to MobX 4/5, "loose" must be false!    ^
+              ],
+              "assumptions": {
+                "setPublicClassFields": false
+            }
             },
           },
         ],
@@ -45,18 +62,18 @@ module.exports = {
         exclude: /node_modules/,
         use: [
           {
-            loader:  MiniCssExtractPlugin.loader,
+            loader: MiniCssExtractPlugin.loader,
           },
           {
-            loader:"css-loader",
-            options:{
-              modules:{
-                localIdentName: "[local]_[hash:base64:5]"
+            loader: "css-loader",
+            options: {
+              modules: {
+                localIdentName: "[local]_[hash:base64:5]",
               },
-              sourceMap:true
+              sourceMap: true,
             },
           },
-          
+
           "sass-loader",
         ],
       },
@@ -64,10 +81,10 @@ module.exports = {
         test: /^.*(?<!\.module)\.css$/,
         use: [
           {
-            loader:  MiniCssExtractPlugin.loader,
+            loader: MiniCssExtractPlugin.loader,
           },
           {
-            loader:"css-loader",
+            loader: "css-loader",
           },
         ],
       },

@@ -1,5 +1,4 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React, { useRef } from "react";
 import VanilInput from "./LazyInput";
 import  styles from "./minmax.module.scss";
 
@@ -7,23 +6,33 @@ interface IProps{
   min:number,
   max:number,
   count:number,
-  onChange:(index:number)=>void
+  onChange:(newCount:number)=>void
 }
 function MinMax(props:IProps) {
+  //ref для доступа к input
+  const ref = useRef<VanilInput>(null);
+
+  //Вписать value  в ограничения
   const trunkValue = (value:number) => {
     return Math.max(props.min, Math.min(value,props.max));
   };
   const increase = () => changeCount(props.count + 1);
   const decrease = () => changeCount(props.count - 1);
-  //Безусловное обновление родительского 
+  //Обновление данных когда новое и старое значение не совподают
   const changeCount=(newCount:number)=>{
       newCount = trunkValue(newCount);
-      // if (props.count===newCount) return;
+      if (props.count===newCount) return;
       props.onChange(newCount);
   }
   const acceptInputValue=(value:string)=>{
-      const newValue = parseInt(value,10);
-      changeCount(isNaN(newValue)?props.min:newValue);
+      const intValue = parseInt(value,10);
+      const newValue = isNaN(intValue)?props.min:intValue;
+      if (newValue.toString()!==value && ref?.current!==null){
+        //Обновить VanilInput
+        console.log(`Обновление заначения на ${newValue}`);
+        ref.current.setValue(newValue.toString());
+      }
+      changeCount(newValue);
   }
 
   return (
@@ -35,6 +44,7 @@ function MinMax(props:IProps) {
       >
       </button>
       <VanilInput
+        ref={ref}
         other={{className:styles.input}}
         value={props.count.toString()}
         onChange={(evt)=>acceptInputValue(evt.target.value)}
