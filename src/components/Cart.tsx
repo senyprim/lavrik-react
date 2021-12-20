@@ -5,10 +5,10 @@ import router from "../store/Router";
 import { observer } from "mobx-react";
 
 function  Cart() {
+  console.log(`Аctive Page = ${router.activePage}`);
   const productsRows = store.products.map((item, index) => {
     const { id, title, price, rest = 0, count = 0 } = item;
     const total = (price ?? 0) * count;
-    console.log(`Аctive Page = ${router.activePage}`);
 
     return (
       <tr key={id} className="cart__product-row">

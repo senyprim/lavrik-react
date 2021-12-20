@@ -8,10 +8,6 @@ export class Cart {
     makeObservable(this);
   }
 
-  getValidCount(index:number,count:number){
-    
-  }
-
   @computed public get total(): number {
       return this._products.reduce((ac,it)=>ac+it.count * (it?.price??0),0)
   }

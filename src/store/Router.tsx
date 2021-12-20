@@ -32,20 +32,16 @@ export class Router {
 
 
     @action nextPage(){
-        console.log(`Old Page = ${this._activePage}`);
         switch (this._activePage){
             case Pages.Cart:this._activePage=Pages.UserData;break;
             case Pages.UserData:this._activePage=Pages.Finish;break;
         }
-        console.log(`New Page = ${this._activePage}`);
     }
     @action previusPage(){
-        console.log(`Old Page = ${this._activePage}`);
         switch (this._activePage){
             case Pages.UserData:this._activePage=Pages.Cart;break;
             case Pages.Finish:this._activePage=Pages.UserData;break;
         }
-        console.log(`New Page = ${this._activePage}`);
     }
 }
 export default new Router(Pages.Cart);

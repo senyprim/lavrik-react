@@ -6,9 +6,12 @@ export type Product = {
     count: number
 }
 export type User = {
-    name?:string,
-    phone?:string,
-    email?:string
+    name :string|null,
+    phone:string|null,
+    email:string|null
 }
+export type ErrorType=[string,string];
+
+
 export enum Pages  {Cart,UserData,Finish};
 

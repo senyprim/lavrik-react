@@ -25,7 +25,7 @@ function ResultScreen() {
 
   return (
     <div>
-      <h2>{user.name} вы заказали товара на {store.total}</h2>
+      <h2>{user.getField('name')} вы заказали товара на {store.total}</h2>
       <table>
         <tbody>
           <tr>
