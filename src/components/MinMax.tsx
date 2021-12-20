@@ -9,6 +9,8 @@ interface IProps{
   onChange:(newCount:number)=>void
 }
 function MinMax(props:IProps) {
+  console.log(`render min-max`);
+
   //ref для доступа к input
   const ref = useRef<VanilInput>(null);
 
