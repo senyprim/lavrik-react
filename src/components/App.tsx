@@ -10,15 +10,11 @@ import { EnumMember, EnumType } from "typescript";
 
 interface IState {
   currentPage: Pages;
-  products: Product[];
-  user?: User;
 }
 
 export default class extends React.Component<null, IState> {
   state = {
     currentPage: Pages.Cart,
-    products: getProducts(),
-    user: {},
   };
   //Обработчик сменны колличества товара
   changeProductCount = (newCount: number, index: number): void => {
@@ -107,35 +103,5 @@ export default class extends React.Component<null, IState> {
   };
 }
 
-const getProducts = () => {
-  return [
-    {
-      id: 100,
-      title: "Ipnone 200",
-      price: 12000,
-      rest: 10,
-      count: 1,
-    },
-    {
-      id: 101,
-      title: "Samsung AAZ8",
-      price: 22000,
-      rest: 5,
-      count: 2,
-    },
-    {
-      id: 103,
-      title: "Nokia 3310",
-      price: 5000,
-      rest: 3,
-      count: 3,
-    },
-    {
-      id: 105,
-      title: "Huawei ZZ",
-      price: 15000,
-      rest: 8,
-      count: 4,
-    },
-  ];
+
 };

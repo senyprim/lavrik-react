@@ -2,7 +2,7 @@ export type Product = {
     id: number,
     title: string,
     price?: number,
-    rest?: number,
+    rest: number,
     count: number
 }
 export type User = {
