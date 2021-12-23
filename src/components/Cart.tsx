@@ -1,18 +1,25 @@
 import React from "react";
+import { AnyAction, Dispatch } from "redux";
+import { connect } from "react-redux";
+
 import MinMax from "./MinMax";
-import { getTotalCostProducts, Product } from "../types";
+import { Pages, Product } from "../types";
+import { ActionCreator, State } from "../reducer/cart/reducer";
+import { getProducts, getTotal } from "../reducer/cart/selector";
 
 interface IProps {
   products: Product[];
+  total: number;
   onRemove: (index: number) => void;
   onChange: (count: number, index: number) => void;
-  nextPage: ()=>void;
+  goToPage: (page:Pages) => void;
 }
 
-function Cart(props: IProps) {
-  const {nextPage, products, onChange, onRemove } = props;
-
-  const productsRows = products.map((item, index) => {
+const Cart = (props: IProps)=>{
+  console.log(`Render cart page`);
+  const { products, onChange, onRemove, total, goToPage} = props;
+ 
+  const _products = products?.map((item, index) => {
     const { id, title, price, rest = 0, count = 0 } = item;
     const total = (price ?? 0) * count;
     return (
@@ -25,14 +32,14 @@ function Cart(props: IProps) {
           <MinMax
             min={0}
             max={rest}
-            onChange={(newCount: number) => onChange(newCount, index)}
+            onChange={(newCount: number) => onChange(id, newCount)}
             count={count}
           />
         </td>
         <td className="text-center text-lg text-medium">{total}</td>
         <td className="cart__action-row ">
           <a
-            onClick={() => onRemove(index)}
+            onClick={() => onRemove(id)}
             className="btn btn-danger"
             href="#"
           >
@@ -61,18 +68,35 @@ function Cart(props: IProps) {
             </tr>
           </thead>
           <tbody>
-            {productsRows}
+            {_products}
             <tr className="cart__total-row">
-              <td colSpan={5}>Итого:{getTotalCostProducts(products)}</td>
+              <td colSpan={5}>Итого:{total}</td>
             </tr>
           </tbody>
         </table>
       </div>
-      <button className="btn btn-primary" onClick={nextPage}>
+      <button className="btn btn-primary" onClick={()=>goToPage(Pages.UserData)}>
         Далее
       </button>
     </div>
   );
 }
-
-export default Cart;
+const mapStateToProps = (state: State) => {
+  return {
+    products: getProducts(state),
+    total:getTotal(state)
+  };
+};
+const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => {
+  return {
+    onChange: (id: number, count: number) =>
+      dispatch(ActionCreator.changeCountProduct(id, count)),
+    onRemove: (id:number) => {
+      dispatch(ActionCreator.deleteProduct(id))
+    },
+    goToPage: (page:Pages)=>
+      dispatch(ActionCreator.goToPage(page))
+  };
+};
+export {Cart};
+export default connect(mapStateToProps, mapDispatchToProps)(Cart);

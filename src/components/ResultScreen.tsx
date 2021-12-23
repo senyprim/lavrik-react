@@ -1,16 +1,21 @@
-import React from "react";
-import { Product, User, getTotalCostProducts } from "../types";
+import React, { Dispatch } from "react";
+import { connect } from "react-redux";
+import { AnyAction } from "redux";
+import { IUserData } from "../models/user";
+import { ActionCreator, State } from "../reducer/cart/reducer";
+import { getEmail, getName, getPhone, getProducts, getTotal } from "../reducer/cart/selector";
+import { Product, Pages } from "../types";
 
 
 interface IProps{
   products:Product[],
-  user:User,
-  completeOrder:()=>void,
+  user:IUserData,
   previousPage:()=>void,
+  total:number,
 }
 
 function ResultScreen(props:IProps) {
-  const {products,user,completeOrder} = props;
+  const {products, user, previousPage,total:allTotal} = props;
   const productsRows = products.map((item, index) => {
     const { id, title, price, rest = 0, count = 0 } = item;
     const total = (price??0) * count;
@@ -26,7 +31,7 @@ function ResultScreen(props:IProps) {
 
   return (
     <div>
-      <h2>{user.name} вы заказали товара на {getTotalCostProducts(products)}</h2>
+      <h2>{user.name} вы заказали товара на {allTotal}</h2>
       <table>
         <tbody>
           <tr>
@@ -38,18 +43,39 @@ function ResultScreen(props:IProps) {
           {productsRows}
           <tr>
             <td>Итого:</td>
-            <td>{getTotalCostProducts(products)}</td>
+            <td>{allTotal}</td>
           </tr>
         </tbody>
       </table>
-      <button className="btn btn-danger" onClick={props.previousPage}>
+      <button className="btn btn-danger" onClick={previousPage}>
           Назад
         </button>
-        <button onClick={props.completeOrder} className="btn btn-primary">
+        <button onClick={()=>alert('Заказано')} className="btn btn-primary">
           Далее
         </button>
     </div>
   );
 }
 
-export default ResultScreen;
+const mapStateToProps = (state:State,ownProps:IProps)=>(
+  Object.assign({},ownProps,
+    {
+      products:getProducts(state),
+      user:{
+        name:getName(state),
+        phone:getPhone(state),
+        email:getEmail(state)
+      },
+      total:getTotal(state),
+    }
+  )
+)
+const mapDispatchToProps = (dispatch:Dispatch<AnyAction>)=>(
+  {
+    previousPage:()=>dispatch(ActionCreator.goToPage(Pages.UserData)),
+  }
+)
+
+export {ResultScreen};
+export default connect(mapStateToProps,mapDispatchToProps)(ResultScreen);
+

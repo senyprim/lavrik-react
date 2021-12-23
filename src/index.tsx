@@ -4,7 +4,7 @@ import { createStore } from "redux";
 import { Provider } from "react-redux";
 import App from "./components/App";
 import { getProducts } from "./mock";
-import { ActionCreator, reducer } from "./reducer/cart/cart";
+import { ActionCreator, reducer } from "./reducer/cart/reducer";
 
 const store = createStore(reducer);
 store.dispatch(ActionCreator.loadProducts(getProducts()));

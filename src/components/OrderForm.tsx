@@ -1,121 +1,179 @@
-import Button from "@restart/ui/esm/Button";
-import React from "react";
-import { Modal } from "react-bootstrap";
-import { User } from "../types";
-import LazyInput from "./LazyInput";
+import React, { Dispatch } from "react";
+import { Button, Col, Form, Modal } from "react-bootstrap";
+import { connect } from "react-redux";
+import { AnyAction } from "redux";
+import { ErrorType } from "../models/ErrorStorage";
+import { IUserData } from "../models/user";
+import { ActionCreator, State } from "../reducer/cart/reducer";
+import {
+  getName,
+  getPhone,
+  getEmail,
+  getConfirm,
+  getErrors,
+  isValidUser,
+} from "../reducer/cart/selector";
+import { Pages } from "../types";
+import { getDefaultInputProperty } from "../utils/utils";
 
 interface IProps {
-  user: User;
-  onChange: (field: keyof User, value: string) => void;
+  user: IUserData;
+  confirm: boolean;
+  changeUser: (field: keyof IUserData, value: string) => void;
+  setConfirm: (confirm: boolean) => void;
   nextPage: () => void;
   previousPage: () => void;
+  errors:Record<string, ErrorType[]>,
+  isValidUser:boolean,
 }
 
 const OrderForm = (props: IProps) => {
-  console.log('OrderForm');
+  console.log("OrderForm");
+  const {
+    user,
+    changeUser,
+    setConfirm,
+    nextPage,
+    previousPage,
+    confirm,
+    errors,
+    isValidUser,
+  } = props;
   const [show, setShow] = React.useState(false);
-  const closeModal = ()=>{
+
+  //Рендерит один инпут
+  const _renderInput = (
+    name: keyof IUserData,
+    value: string,
+    errors: ErrorType[],
+    onChange: (value: string) => void,
+    other?: Record<string, string>
+  ): JSX.Element => {
+    const data = getDefaultInputProperty(name, other);
+    const isValid = !errors || errors.length == 0;
+    const errorsFeedback = isValid ? null : (
+      <Form.Control.Feedback type="invalid">
+        {errors.map((it) => (
+          <p key={it.errorNumber}>{it.message}</p>
+        ))}
+      </Form.Control.Feedback>
+    );
+    return (
+      <Form.Group as={Col} controlId={data.id} key={data.id}>
+        <Form.Label>{data.caption}:</Form.Label>
+        <Form.Control
+          placeholder={data.placeholder}
+          type={data.itemType}
+          value={value ?? ``}
+          onChange={(evt) => onChange(evt.target.value)}
+          disabled={confirm}
+          isInvalid={!isValid}
+        />
+        {errorsFeedback}
+      </Form.Group>
+    );
+  };
+  //Рендерим все input
+  const _renderInputs = (Object.keys(user) as Array<keyof IUserData>).map(
+    (name) =>
+      _renderInput(name, 
+        user[name],
+        errors[name],
+        (value: string): void =>changeUser(name, value)
+      )
+  );
+
+  //Рендерим спиок введенных данных
+  const _renderModalData = (
+    <ul>
+      {(Object.keys(user) as Array<keyof IUserData>).map(
+        (it, index) => (
+          <li key={index}>
+            {getDefaultInputProperty(it).caption}:{user[it]}
+          </li>
+        )
+      )}
+    </ul>
+  );
+
+  const _closeModal = () => {
     console.log(`Закрываем окно`);
     setShow(false);
-  }
-  const confirm = ()=>{
-    closeModal();
+  };
+  const _confirmUserData = () => {
+    _closeModal();
+    setConfirm(true);
     props.nextPage();
-  }
-  const { name, email, phone } = props.user;
-  return (
-    <div>
-      <h2>Контактные данные</h2>
-      <form>
-        <div className="row mb-3">
-          <label htmlFor="inputName" className="col-sm-2 col-form-label">
-            Имя:
-          </label>
-          <div className="col-sm-10">
-            <LazyInput
-              other={{
-                className: "form-control",
-                id: "inputName",
-                placeholder: "Имя",
-              }}
-              value={name}
-              onChange={(evt) => props.onChange("name", evt.target.value)}
-            />
-          </div>
-        </div>
-        <div className="row mb-3">
-          <label htmlFor="inputEmail" className="col-sm-2 col-form-label">
-            Email
-          </label>
-          <div className="col-sm-10">
-            <LazyInput
-              other={{
-                itemType: "email",
-                className: "form-control",
-                id: "inputEmail",
-                placeholder: "Email",
-              }}
-              onChange={(evt) => props.onChange("email", evt.target.value)}
-              value={email}
-            />
-          </div>
-        </div>
-        <div className="row mb-3">
-          <label htmlFor="inputPhone" className="col-sm-2 col-form-label">
-            Phone
-          </label>
-          <div className="col-sm-10">
-            <LazyInput
-              other={{
-                itemType: "tel",
-                className: "form-control",
-                id: "inputTel",
-                placeholder: "Телефон",
-              }}
-              onChange={(evt) => props.onChange("phone", evt.target.value)}
-              value={phone}
-            />
-          </div>
-        </div>
-        <button className="btn btn-danger" onClick={props.previousPage}>
-          Назад
-        </button>
-        <button
-        className="btn btn-primary"
-        type="button"
-          onClick={()=>setShow(true)}
-        >
-          Далее
-        </button>
-      </form>
+  };
+  const _next = () => {
+    if (confirm) nextPage();
+    else setShow(true);
+  };
 
-      <Modal show={show} onHide={()=>closeModal()}>
+    //Рендерим форму
+    return (
+      <div>
+        <h2>Контактные данные</h2>
+        <Form>
+          {_renderInputs}
+          <Button
+            variant="warning"
+            type={`button`}
+            onClick={previousPage}
+          >
+            Назад
+          </Button>
+          {confirm ? (
+            <Button 
+            variant="secondary"
+            type={`button`} onClick={() => setConfirm(false)}>
+              Изменить данные
+            </Button>
+          ) : null}
+          <Button variant="primary" type={`button`} onClick={_next} disabled={!isValidUser}>
+            Принять данные
+          </Button>
+        </Form>
+  
+        <Modal show={show} onHide={_closeModal}>
         <Modal.Header closeButton>
           <Modal.Title>Подтвердите контактные данные:</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <ul>
-            <li>
-              Имя пользователя:{name}
-            </li>
-            <li>
-              Електронная почта:{email}
-            </li>
-            <li>
-              Телефон пользователя:{phone}
-            </li>
-          </ul>
+          <ul>{_renderModalData}</ul>
         </Modal.Body>
         <Modal.Footer>
-          <Button  onClick={()=>closeModal()}>
-            Не верно - Вернуться 
-          </Button>
-          <Button  onClick={confirm}>
-            Верно - Далее
-          </Button>
+          <Button onClick={_closeModal}>Не верно - Вернуться</Button>
+          <Button onClick={_confirmUserData}>Верно - Далее</Button>
         </Modal.Footer>
       </Modal>
     </div>
   );
 };
-export default OrderForm;
+
+const mapStateToProps = (state: State, ownProps: IProps) =>
+  Object.assign({}, ownProps, {
+    user: {
+      name: getName(state),
+      phone: getPhone(state),
+      email: getEmail(state),
+    },
+    confirm: getConfirm(state),
+    errors: getErrors(state),
+    isValidUser: isValidUser(state),
+  });
+const mapDispatchToProps = (dispatch: Dispatch<AnyAction>, ownProps: IProps) =>
+  Object.assign(
+    {},
+    {
+      changeUser: (fieldName: keyof IUserData, value: string) =>
+        dispatch(ActionCreator.setfield(fieldName, value)),
+      setConfirm: (confirm: boolean) =>
+        dispatch(ActionCreator.setConfirm(confirm)),
+      previousPage: ()=>dispatch(ActionCreator.goToPage(Pages.Cart)),
+      nextPage: ()=>dispatch(ActionCreator.goToPage(Pages.Finish)),
+    }
+  );
+
+export { OrderForm };
+export default connect(mapStateToProps, mapDispatchToProps)(OrderForm);
