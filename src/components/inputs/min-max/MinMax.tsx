@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import VanilInput from "./LazyInput";
+import VanilInput from "../lazy/LazyInput";
 import  styles from "./minmax.module.scss";
 
 interface IProps{
@@ -9,7 +9,6 @@ interface IProps{
   onChange:(newCount:number)=>void
 }
 function MinMax(props:IProps) {
-  console.log(`render min-max`);
 
   //ref для доступа к input
   const ref = useRef<VanilInput>(null);
@@ -31,7 +30,6 @@ function MinMax(props:IProps) {
       const newValue = isNaN(intValue)?props.min:intValue;
       if (newValue.toString()!==value && ref?.current!==null){
         //Обновить VanilInput
-        console.log(`Обновление заначения на ${newValue}`);
         ref.current.setValue(newValue.toString());
       }
       changeCount(newValue);

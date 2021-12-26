@@ -1,18 +1,17 @@
 import React from "react";
-import store from "../store/Cart";
-import router from "../store/Router";
-import user from "../store/User";
-import {observer} from "mobx-react";
+import store from "../../store/Cart";
+import user from "../../store/User";
+import { observer } from "mobx-react";
+import { routesMap } from "../../routes";
+import order from "../order";
+import {Link} from "react-router-dom";
 
-interface IProps{
-
-}
+interface IProps {}
 
 function ResultScreen() {
-
-  const productsRows = store.products.map((item, index) => {
+  const productsRows = store.getOrderedProducts().map((item, index) => {
     const { id, title, price, rest = 0, count = 0 } = item;
-    const total = (price??0) * count;
+    const total = (price ?? 0) * count;
     return (
       <tr key={`${id}:${0}:${rest}:${count}`}>
         <td>{title}</td>
@@ -25,7 +24,9 @@ function ResultScreen() {
 
   return (
     <div>
-      <h2>{user.getField('name')} вы заказали товара на {store.total}</h2>
+      <h2>
+        {user.getField("name")} вы заказали товара на {store.total}
+      </h2>
       <table>
         <tbody>
           <tr>
@@ -41,11 +42,11 @@ function ResultScreen() {
           </tr>
         </tbody>
       </table>
-      <button type="button" className="btn btn-danger" onClick={()=>router.previusPage()}>
-          Назад
-        </button>
+      <Link className="btn btn-danger" to={routesMap.order}>
+        Назад
+      </Link>
     </div>
   );
 }
-
+export {ResultScreen};
 export default observer(ResultScreen);

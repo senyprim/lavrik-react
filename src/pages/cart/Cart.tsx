@@ -1,12 +1,14 @@
 import React from "react";
-import MinMax from "./MinMax";
-import store from "../store/Cart";
-import router from "../store/Router";
+import MinMax from "../../components/inputs/min-max/MinMax";
+import store from "../../store/Cart";
 import { observer } from "mobx-react";
+import {Link} from "react-router-dom";
+import { routesMap } from "../../routes";
+import order from "../order";
 
 function  Cart() {
   console.log(`Render cart page`);
-  const productsRows = store.products.map((item, index) => {
+  const productsRows = store.getOrderedProducts().map((item, index) => {
     const { id, title, price, rest = 0, count = 0 } = item;
     const total = (price ?? 0) * count;
 
@@ -21,7 +23,7 @@ function  Cart() {
             min={0}
             max={rest}
             count={count}
-            onChange={(count: number) => store.changeCont(index, count)}
+            onChange={(count: number) => store.addProduct(id, count)}
           />
         </td>
         <td className="text-center text-lg text-medium">{total}</td>
@@ -29,7 +31,7 @@ function  Cart() {
           <a
             className="btn btn-danger"
             href="#"
-            onClick={() => store.remove(index)}
+            onClick={() => store.removeProduct(id)}
           >
             Удалить
           </a>
@@ -43,7 +45,7 @@ function  Cart() {
       <div className="padding-bottom-3x mb-1">
         <h2 className="cart_title">
           Shopping Cart
-          <small> ({store.products.length} item in your cart) </small>
+          <small> ({store.getOrderedProducts().length} item in your cart) </small>
         </h2>
         <div className="">
           <table className="table table-striped table-bordered border-primary">
@@ -64,12 +66,12 @@ function  Cart() {
             </tbody>
           </table>
         </div>
-        <a
+        <Link
           className="btn btn-primary"
-          onClick={()=>router.nextPage()}
+          to={routesMap.order}
         >
           Далее
-        </a>
+        </Link>
       </div>
     </div>
   );

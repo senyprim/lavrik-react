@@ -4,7 +4,12 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
   entry: "./src/index.tsx",
-  output: { path: path.join(__dirname, "build"), filename: "index.bundle.js" },
+  output: { 
+    path: path.join(__dirname, "./build/"),
+    filename: "index.bundle.js" ,
+    publicPath:"/",
+
+  },
   mode: process.env.NODE_ENV || "development",
   resolve: {
     extensions: [".tsx", ".ts", ".js"],
@@ -99,7 +104,10 @@ module.exports = {
       template: path.join(__dirname, "src", "index.html"),
     }),
     new MiniCssExtractPlugin({
-      filename: "style.css",
+      filename: "css/style.css",
     }),
   ],
+  devServer: {
+    historyApiFallback:true
+  }
 };

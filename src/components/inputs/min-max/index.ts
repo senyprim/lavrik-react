@@ -1,0 +1,1 @@
+import MinMax from "./MinMax";

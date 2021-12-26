@@ -46,7 +46,7 @@ class User {
       caption: fieldName,
       itemType: `text`,
       id: `input-${fieldName}`,
-      palceholder: fieldName,
+      placeholder: fieldName,
       ...User._formData[fieldName],
     };
   }
@@ -71,7 +71,7 @@ class User {
   public _validatePhone=():void=>{
     this.errors.clearErrors('phone');
     const value = this.getField(`phone`);
-    const pattern:RegExp =/^[0-9]{2,10}$/i;
+    const pattern:RegExp =/^[0-9]{2,15}$/i;
     if (value!==null && !pattern.test(value) ) this.errors.setErrors('phone',[{errorNumber:1,message:'Телефон должен содержать только цифры'}]);
   }
   public validateField=(fieldName:keyof UserType):void=>{

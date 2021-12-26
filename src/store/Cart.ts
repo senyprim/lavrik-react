@@ -1,58 +1,43 @@
-import { Product } from "../types";
+import { OrderProduct, Product } from "../types";
 import { observable, computed, action, makeAutoObservable, makeObservable } from "mobx";
+import Products from "./Products";
+import history from "../history";
 
+type CartRecord = {
+  count:number;
+}
 export class Cart {
-  @observable private _products: Product[];
-  constructor(products: Product[]) {
+  @observable private _products: Map<number,CartRecord>;
+
+  constructor(products: Map<number,CartRecord>=new Map<number,CartRecord>()) {
     this._products = products;
     makeObservable(this);
   }
 
-  @computed public get total(): number {
-      return this._products.reduce((ac,it)=>ac+it.count * (it?.price??0),0)
-  }
-  @action public changeCont(index:number,count:number){
-      
-      this._products[index].count=count;
-  }
-  @action public remove(i:number){
-    this._products.splice(i,1);
-  }
-  @computed public get products():Product[] {
-    return [...this._products];
-  }
-}
+  public getOrderedProducts=():OrderProduct[]=>
+  Array.from(this._products.keys())
+  .map(this.getOrderProduct)
 
-const _getProducts = () => {
-  return [
-      {
-        id: 100,
-        title: "Ipnone 200",
-        price: 12000,
-        rest: 10,
-        count: 1,
-      },
-      {
-        id: 101,
-        title: "Samsung AAZ8",
-        price: 22000,
-        rest: 5,
-        count: 2,
-      },
-      {
-        id: 103,
-        title: "Nokia 3310",
-        price: 5000,
-        rest: 3,
-        count: 3,
-      },
-      {
-        id: 105,
-        title: "Huawei ZZ",
-        price: 15000,
-        rest: 8,
-        count: 4,
-      },
-    ];
-  };
-  export default new Cart(_getProducts());
+  public getOrderProduct=(id:number):OrderProduct=>
+    Object.assign({},Products.getProduct(id),this._products.get(id))
+  
+  @action public addProduct=(id:number,count:number=1)=>{
+    const product=Products.getProduct(id);
+    if (product==null) return ;
+    count = Math.min(product.rest,Math.max(count,0));
+
+    this._products.set(product.id,{count});
+  }
+
+  @action public removeProduct(id:number){
+    this._products.delete(id);
+  }
+  
+  @computed public get total(): number {
+      return Object.values(this.getOrderedProducts())
+      .reduce((ac,it)=>ac+it.count * (it?.price??0),0)
+  }
+  public isOrder=(id:number):boolean=> this._products.has(id);
+}
+export {Cart as CartClass} ;
+export default new Cart();

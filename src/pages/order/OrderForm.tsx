@@ -1,12 +1,19 @@
 import { Button } from "react-bootstrap";
 import React from "react";
 import { Col, Form, Modal } from "react-bootstrap";
-import router from "../store/Router";
-import user from "../store/User";
+import user from "../../store/User";
 import { observer } from "mobx-react";
-import { User as UserType } from "../types";
+import {Link, RouteComponentProps} from "react-router-dom"
+// import history from "../../history";
+import { User as UserType } from "../../types";
+import { routesMap } from "../../routes";
 
-function OrderForm() {
+interface IProps extends RouteComponentProps{
+}
+
+
+function OrderForm(props:IProps) {
+  const {history} = props;
   const [show, setShow] = React.useState(false);
   //#region callback
   const _closeModal = () => {
@@ -16,11 +23,11 @@ function OrderForm() {
   const _confirm = () => {
     _closeModal();
     user.setConfirm(true);
-    router.nextPage();
+    history.push(routesMap.result);
   };
 
-  const _next = () => {
-    if (user.confirm) router.nextPage();
+  const _next = (history) => {
+    if (user.confirm) history.push(routesMap.result);
     else setShow(true);
   };
   //#endregion
@@ -34,7 +41,6 @@ function OrderForm() {
     const errors = user.errors.getCategErrors(name);
     const isValid = !errors || errors.length == 0;
     //Рендерим ошибки если есть
-    console.log(`isvalid=${isValid} errors=${errors}`);
     const errorsFeedback = isValid ? null : (
       <Form.Control.Feedback type="invalid">
         {errors.map((it) => (
@@ -43,10 +49,10 @@ function OrderForm() {
       </Form.Control.Feedback>
     );
     return (
-      <Form.Group as={Col} controlId={data.id}>
+      <Form.Group as={Col} controlId={data.id} key={data.id}>
         <Form.Label>{data.caption}:</Form.Label>
         <Form.Control
-          placeholder={data.palceholder}
+          placeholder={data.placeholder}
           type={data.itemType}
           value={value ?? ``}
           onChange={(evt) => onChange(evt.target.value)}
@@ -83,13 +89,13 @@ function OrderForm() {
       <h2>Контактные данные</h2>
       <Form>
         {renderInputs}
-        <Button
+        <Link
           variant="warning"
-          type={`button`}
-          onClick={() => router.previusPage()}
+          className="btn btn-warning"
+          to={routesMap.cart}
         >
           Назад
-        </Button>
+        </Link>
         {user.confirm ? (
           <Button 
           variant="secondary"
@@ -97,7 +103,7 @@ function OrderForm() {
             Изменить данные
           </Button>
         ) : null}
-        <Button variant="primary" type={`button`} onClick={_next} disabled={!user.isValid()}>
+        <Button variant="primary" type={`button`} onClick={()=>_next(history)} disabled={!user.isValid()}>
           Принять данные
         </Button>
       </Form>

@@ -1,9 +1,11 @@
-export type Product = {
+interface Product {
     id: number,
     title: string,
     price?: number,
-    rest?: number,
-    count: number
+    rest: number,
+}
+interface OrderProduct extends Product{
+    count:number;
 }
 export type User = {
     name :string|null,
@@ -11,7 +13,5 @@ export type User = {
     email:string|null
 }
 export type ErrorType=[string,string];
-
-
 export enum Pages  {Cart,UserData,Finish};
-
+export type {Product,OrderProduct}
