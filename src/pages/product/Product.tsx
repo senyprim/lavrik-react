@@ -14,6 +14,7 @@ interface IProps {
 }
 const Product = (props: RouteComponentProps<IdParams>) => {
     const id = parseInt(props.match.params.id);
+    const product = products.getProduct(id);
 
     const _renderProduct = (item: ProductType) => (
         <div className="card">
@@ -40,9 +41,9 @@ const Product = (props: RouteComponentProps<IdParams>) => {
     )
 
     return (
-        isNaN(id)
+        (!product)
             ? <Error404 />
-            : _renderProduct(products.getProduct(id))
+            : _renderProduct(product)
         );
 }
 
