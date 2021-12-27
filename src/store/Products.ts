@@ -3,17 +3,16 @@ import { observable, computed, action, makeAutoObservable, makeObservable } from
 
 
 export class Products {
-  @observable private _products: Product[];
+  @observable private _products: Map<number,Product>=new Map();
   constructor(products: Product[]) {
-    this._products = products;
+    products.forEach(it=>this._products.set(it.id,it));
     makeObservable(this);
   }
   @computed public get products():Product[] {
-    return [...this._products];
+    return Array.from(this._products.values());
   }
-  public getProduct=(id:number):Product=>this._products.filter(it=>it.id===id)[0];
+  public getProduct=(id:number):Product|undefined=>this._products.get(id);
 }
-
 const _getProducts = () => {
   return [
       {
