@@ -2,9 +2,9 @@ import React, { Dispatch } from "react";
 import { Button, Col, Form, Modal } from "react-bootstrap";
 import { connect } from "react-redux";
 import { AnyAction } from "redux";
-import { ErrorType } from "../models/ErrorStorage";
-import { IUserData } from "../models/user";
-import { ActionCreator, State } from "../reducer/cart/reducer";
+import { ErrorType } from "../../models/ErrorStorage";
+import { IUserData } from "../../models/user";
+import { ActionCreator, State } from "../../reducer/products/reducer";
 import {
   getName,
   getPhone,
@@ -12,9 +12,9 @@ import {
   getConfirm,
   getErrors,
   isValidUser,
-} from "../reducer/cart/selector";
-import { Pages } from "../types";
-import { getDefaultInputProperty } from "../utils/utils";
+} from "../../reducer/products/selector";
+import { Pages } from "../../types";
+import { getDefaultInputProperty } from "../../utils/utils";
 
 interface IProps {
   user: IUserData;

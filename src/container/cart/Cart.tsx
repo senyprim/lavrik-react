@@ -2,10 +2,10 @@ import React from "react";
 import { AnyAction, Dispatch } from "redux";
 import { connect } from "react-redux";
 
-import MinMax from "./MinMax";
-import { Pages, Product } from "../types";
-import { ActionCreator, State } from "../reducer/cart/reducer";
-import { getProducts, getTotal } from "../reducer/cart/selector";
+import MinMax from "../../components/MinMax";
+import { Pages, Product } from "../../types";
+import { ActionCreator, getTotal, getProducts } from "../../reducer/products";
+import { IState as IGlobalState} from "../../reducer/";
 
 interface IProps {
   products: Product[];
@@ -81,7 +81,7 @@ const Cart = (props: IProps)=>{
     </div>
   );
 }
-const mapStateToProps = (state: State) => {
+const mapStateToProps = (state: IGlobalState) => {
   return {
     products: getProducts(state),
     total:getTotal(state)
@@ -90,13 +90,10 @@ const mapStateToProps = (state: State) => {
 const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => {
   return {
     onChange: (id: number, count: number) =>
-      dispatch(ActionCreator.changeCountProduct(id, count)),
+      dispatch(ActionCreator.addProductToCart(id, count)),
     onRemove: (id:number) => {
       dispatch(ActionCreator.deleteProduct(id))
-    },
-    goToPage: (page:Pages)=>
-      dispatch(ActionCreator.goToPage(page))
-  };
+    }
 };
 export {Cart};
 export default connect(mapStateToProps, mapDispatchToProps)(Cart);

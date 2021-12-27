@@ -2,7 +2,7 @@ export type ErrorType={
     errorNumber :number,
     message:string
 }
-type ErrorRecord = Record<string, ErrorType[]>;
+export type ErrorRecord = Record<string, ErrorType[]>;
 export class ErrorStorage {
     private _errors:ErrorRecord ={} as ErrorRecord;
     public static setErrorsTo(allErrors:ErrorRecord, categ:string, errors?:ErrorType[]):ErrorRecord{

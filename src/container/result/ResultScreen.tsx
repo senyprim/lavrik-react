@@ -1,10 +1,10 @@
 import React, { Dispatch } from "react";
 import { connect } from "react-redux";
 import { AnyAction } from "redux";
-import { IUserData } from "../models/user";
-import { ActionCreator, State } from "../reducer/cart/reducer";
-import { getEmail, getName, getPhone, getProducts, getTotal } from "../reducer/cart/selector";
-import { Product, Pages } from "../types";
+import { IUserData } from "../../models/user";
+import { ActionCreator, State } from "../../reducer/products/reducer";
+import { getEmail, getName, getPhone, getProducts, getTotal } from "../../reducer/products/selector";
+import { Product, Pages } from "../../types";
 
 
 interface IProps{
