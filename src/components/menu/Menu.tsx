@@ -9,11 +9,11 @@ export interface ILink {
 
 interface IProps {
   links: Array<ILink>;
-  activePage: string;
 }
 
 const Menu = (props: IProps) => {
   const { links } = props;
+  console.log(links);
   const renderLink = (args: ILink) => {
     const { url, caption, disabled } = args;
     return (
@@ -38,3 +38,4 @@ const Menu = (props: IProps) => {
     </ul>
   );
 };
+export default Menu;

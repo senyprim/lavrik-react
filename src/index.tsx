@@ -2,12 +2,12 @@ import React from "react";
 import ReactDom from "react-dom";
 import { createStore } from "redux";
 import { Provider } from "react-redux";
-import App from "./container/app/App";
+import App from "./containers/app/App";
 import { getProducts } from "./mock";
-import { ActionCreator} from "./reducer/products";
-import reducer from "./reducer/products";
+import { ActionCreator} from "./reducers/products";
+import store from "~reducers/store";
 
-const store = createStore(reducer);
+
 store.dispatch(ActionCreator.loadProducts(getProducts()));
 
 ReactDom.render(

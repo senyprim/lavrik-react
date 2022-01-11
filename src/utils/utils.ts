@@ -1,5 +1,6 @@
 import { DEFAULT_USER_INPUT_PROPERTY } from "../const";
 import { IUserData } from "../models/user";
+import { routesMap } from "../routes";
 //Создает набор свойст по умолчанию и уточняет их их константы
 
 export const getDefaultInputProperty = (
@@ -13,3 +14,5 @@ export const getDefaultInputProperty = (
   ...DEFAULT_USER_INPUT_PROPERTY[fieldName],
   ...properties,
 });
+
+

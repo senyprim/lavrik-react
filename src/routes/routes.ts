@@ -1,12 +1,13 @@
-import Cart from "../container/cart";
-import Order from "../pages/order";
-import Result from "../pages/result";
-import Error from "../pages/error404";
-import Products from "../pages/products";
-import Product from "../pages/product";
+import React from "react";
+import Cart from "~containers/cart";
+import Order from "~containers/order";
+import Result from "~containers/result";
+import Error from "~components/errors/error404";
+import Products from "~containers/products";
+import Product from "~containers/product";
 type  route={
     url:string,
-    component:()=>JSX.Element,
+    component:any,
     exact?:boolean,
     name?:string
 }

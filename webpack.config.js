@@ -4,11 +4,14 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
   entry: "./src/index.tsx",
-  output: { path: path.join(__dirname, "build"), filename: "index.bundle.js" },
-  mode: process.env.NODE_ENV || "development",
-  resolve: {
-    extensions: [".tsx", ".ts", ".js"],
+  output: { 
+    path: path.join(__dirname, "./build/"),
+    filename: "index.bundle.js" ,
+    publicPath:"/",
+
   },
+  mode: process.env.NODE_ENV || "development",
+
   // devServer: { contentBase: path.join(__dirname, "src") },
   module: {
     rules: [
@@ -82,9 +85,22 @@ module.exports = {
       template: path.join(__dirname, "src", "index.html"),
     }),
     new MiniCssExtractPlugin({
-      filename: "style.css",
+      filename: "css/style.css",
     }),
   ],
+
+  resolve: {
+    alias: {
+        '~': path.resolve(__dirname, 'src'),
+        '~components': path.resolve(__dirname, 'src/components'),
+        '~containers': path.resolve(__dirname, 'src/containers'),
+        '~models': path.resolve(__dirname, 'src/models'),
+        '~reducers': path.resolve(__dirname, 'src/reducers'),
+        '~routes': path.resolve(__dirname, 'src/routes'),
+        '~utils': path.resolve(__dirname, 'src/utils'),
+    },
+    extensions: [".tsx", ".ts", ".js"],
+},
   devServer:{
     historyApiFallback:true
   }

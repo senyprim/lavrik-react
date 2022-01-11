@@ -1,4 +1,4 @@
-import { IUserData } from "./models/user";
+import { IUserData } from "~/models/User";
 
 export const DEFAULT_USER_INPUT_PROPERTY: Record<keyof IUserData,{[key: string]: string }> = {
   name: {
@@ -15,5 +15,9 @@ export const DEFAULT_USER_INPUT_PROPERTY: Record<keyof IUserData,{[key: string]:
     placeholder: `Телефон`,
   },
 };
-
+export const MAIN_MENU_CAPTION:Record<string,string>={
+  products:'Каталог',
+  cart:'Корзина',
+  order:'Контактные данные',
+}
 
