@@ -2,6 +2,16 @@
     "compilerOptions": {
         "useDefineForClassFields": true,
         "experimentalDecorators":true,
+        "baseUrl": "./",
+        "paths": {
+            "~/*":["src/*"],
+            "~components/*":["src/components/*"],
+            "~containers/*":["src/containers/*"],
+            "~models/*":["src/models/*"],
+            "~reducers/*":["src/reducers/*"],
+            "~routes/*":["src/routes/*"],
+            "~utils/*":["src/utils/*"]
+        },
 
 
         "target": "es5",

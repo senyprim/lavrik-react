@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 import VanilInput from "../lazy/LazyInput";
 import  styles from "./minmax.module.scss";
 
-interface IProps{
+export interface IProps{
   min:number,
   max:number,
   count:number,

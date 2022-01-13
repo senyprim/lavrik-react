@@ -1,16 +1,16 @@
-import { OrderProduct, Product } from "../types";
-import { observable, computed, action, makeAutoObservable, makeObservable } from "mobx";
+import { CartRecord, OrderProduct } from "../types";
+import { observable, computed, action, makeObservable } from "mobx";
 import Products from "./Products";
-import history from "../history";
+import {IGlobalStorage} from "./GlobalStore";
 
-type CartRecord = {
-  count:number;
-}
-export class Cart {
+
+export default class {
   @observable private _products: Map<number,CartRecord>;
+  globalStorage:IGlobalStorage;
 
-  constructor(products: Map<number,CartRecord>=new Map<number,CartRecord>()) {
-    this._products = products;
+  constructor(globalStorage:IGlobalStorage,products:Map<number,CartRecord>=new Map()) {
+    this._products=products;
+    this.globalStorage=globalStorage;
     makeObservable(this);
   }
 
@@ -19,10 +19,10 @@ export class Cart {
   .map(this.getOrderProduct)
 
   public getOrderProduct=(id:number):OrderProduct=>
-    Object.assign({},Products.getProduct(id),this._products.get(id))
+    Object.assign({},this.globalStorage.products.getProduct(id),this._products.get(id))
   
   @action public addProduct=(id:number,count:number=1)=>{
-    const product=Products.getProduct(id);
+    const product=this.globalStorage.products.getProduct(id);
     if (product==null) return ;
     count = Math.min(product.rest,Math.max(count,0));
 
@@ -37,7 +37,6 @@ export class Cart {
       return Object.values(this.getOrderedProducts())
       .reduce((ac,it)=>ac+it.count * (it?.price??0),0)
   }
+  
   public isOrder=(id:number):boolean=> this._products.has(id);
 }
-export {Cart as CartClass} ;
-export default new Cart();

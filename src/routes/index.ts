@@ -1,13 +1,14 @@
 import { assign } from "mobx/dist/internal";
-import Cart from "../pages/cart";
-import Order from "../pages/order";
-import Result from "../pages/result";
-import Error from "../pages/error404";
-import Products from "../pages/products";
-import Product from "../pages/product";
+import Cart from "~containers/cart";
+import Order from "~containers/order";
+import Result from "~containers/result";
+import Error from "~components/errors/404";
+import Products from "~containers/products";
+import Product from "~containers/product";
+import React from "react";
 type  route={
     url:string,
-    component:()=>JSX.Element,
+    component:React.FunctionComponent<any>,
     exact?:boolean,
     name?:string
 }
@@ -28,6 +29,7 @@ const routes:route[]=[
     {
         url:`/product/:id`,
         component:Product,
+        exact:true,
     },
     {
         url:`/order`,
@@ -53,6 +55,8 @@ routes.forEach(it=>{
         routesMap[it.name]=it.url;
     }
 })
+
+export const getProductLink = (id: number) => `/product/${id}`;
 
 export {routesMap};
 export default routes;

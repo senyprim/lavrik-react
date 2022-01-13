@@ -12,8 +12,16 @@ module.exports = {
   },
   mode: process.env.NODE_ENV || "development",
   resolve: {
+    alias: {
+        '~': path.resolve(__dirname, 'src'),
+        '~components': path.resolve(__dirname, 'src/components'),
+        '~containers': path.resolve(__dirname, 'src/containers'),
+        '~models': path.resolve(__dirname, 'src/models'),
+        '~routes': path.resolve(__dirname, 'src/routes'),
+        '~utils': path.resolve(__dirname, 'src/utils'),
+    },
     extensions: [".tsx", ".ts", ".js"],
-  },
+},
   // devServer: { contentBase: path.join(__dirname, "src") },
   module: {
     rules: [

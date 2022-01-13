@@ -2,9 +2,10 @@ export type ErrorType={
     errorNumber :number,
     message:string
 }
-type ErrorRecord<T> = Record<keyof T, ErrorType[]>;
+export type ErrorRecord<T> = Record<keyof T, ErrorType[]>;
 export class ErrorStorage<T> {
     private _errors:ErrorRecord<T>={} as ErrorRecord<T>;
+    public getAllError=()=>this._errors;
 
     public getCategErrors=(categ:keyof T):ErrorType[]=>{
         return this._errors[categ];

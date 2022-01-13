@@ -1,21 +1,19 @@
 import React from "react";
-import { observer } from "mobx-react";
-import { BrowserRouter  as  Router , Route, Switch } from "react-router-dom";
+import { inject, observer, Provider } from "mobx-react";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import "./../../../node_modules/bootstrap/dist/css/bootstrap.min.css";
-import history from "../../history";
 
 import routes, { routesMap } from "../../routes";
 import { MAIN_MENU_CAPTION } from "../../const";
 import Menu from "../../components/menu";
+import globalStore from "../../models/GlobalStore";
 
-@observer
 class App extends React.Component {
-
-  links=Object.keys(MAIN_MENU_CAPTION).map(it=>({
-    url:routesMap[it],
+  links = Object.keys(MAIN_MENU_CAPTION).map((it) => ({
+    url: routesMap[it],
     caption: MAIN_MENU_CAPTION[it],
   }));
-  
+
   renderRoutes = routes.map((it) => (
     <Route
       path={it.url}
@@ -26,16 +24,14 @@ class App extends React.Component {
   ));
   render() {
     return (
-      <Router history={history}>
+      <Router>
         <div className="container">
           <div className="row">
-            <div className="col-3">
-              <Menu links={this.links} activePage={history.location.pathname}/>
-            </div>
+            <div className="col-3"><Menu links={this.links} /> </div>
             <div className="col-9">
-              <Switch>
-                {this.renderRoutes}
-              </Switch>
+              <Provider store={globalStore}>
+                <Switch>{this.renderRoutes}</Switch>
+              </Provider>
             </div>
           </div>
         </div>

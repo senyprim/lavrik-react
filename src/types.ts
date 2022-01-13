@@ -5,12 +5,15 @@ interface Product {
     rest: number,
 }
 interface OrderProduct extends Product{
-    count:number;
+    count?:number;
 }
 export type User = {
     name :string|null,
     phone:string|null,
     email:string|null
+}
+export type CartRecord = {
+    count:number,
 }
 export type ErrorType=[string,string];
 export enum Pages  {Cart,UserData,Finish};
