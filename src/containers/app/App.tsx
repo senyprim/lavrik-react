@@ -7,6 +7,7 @@ import routes, { routesMap } from "../../routes";
 import { MAIN_MENU_CAPTION } from "../../const";
 import Menu from "../../components/menu";
 import globalStore from "../../models/GlobalStore";
+import CartButton from "~/containers/cart-button";
 
 class App extends React.Component {
   links = Object.keys(MAIN_MENU_CAPTION).map((it) => ({
@@ -27,9 +28,15 @@ class App extends React.Component {
       <Router>
         <div className="container">
           <div className="row">
-            <div className="col-3"><Menu links={this.links} /> </div>
+            <div className="col-3">
+              <Menu links={this.links} />
+            </div>
+
             <div className="col-9">
               <Provider store={globalStore}>
+                <div className="col-auto mx-left-5">
+                  <CartButton />
+                </div>
                 <Switch>{this.renderRoutes}</Switch>
               </Provider>
             </div>

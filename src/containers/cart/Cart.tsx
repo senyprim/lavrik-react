@@ -13,7 +13,7 @@ const wrapperCart = (props:IProps)=>{
     const {store,history} = props;
     return (
     <Cart
-    cartWithProductData={store.cart.getOrderedProducts()}
+    cartWithProductData={store.cart.orderedProducts}
     total={store.cart.total}
     onRemove={(id:number)=>store.cart.removeProduct(id)}
     onChange={(id:number,count:number)=>store.cart.addProduct(id,count)} 
